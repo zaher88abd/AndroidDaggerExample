@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-android")
     id("kotlin-kapt")
-
+    id ("kotlin-android-extensions")
 
 }
 
@@ -57,6 +57,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:${okhttpVersion}")
     implementation("com.squareup.okhttp3:okhttp-urlconnection:${okhttpVersion}")
     implementation("com.squareup.okhttp3:logging-interceptor:${okhttpVersion}")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     // RxJava
     implementation("io.reactivex.rxjava2:rxjava:2.2.21")
