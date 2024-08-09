@@ -1,11 +1,12 @@
 package dev.zaherabd.daggerexample.mainactivity
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import dev.zaherabd.daggerexample.MyApplication
 import dev.zaherabd.daggerexample.di.RetroServiceInterface
-import dev.zaherabd.daggerexample.model.RecycleData
-import dev.zaherabd.daggerexample.model.RecycleList
+import dev.zaherabd.daggerexample.model.RecyclerList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,21 +16,23 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     @Inject
     lateinit var mService: RetroServiceInterface
 
-    private lateinit var liveDataList: MutableLiveData<RecycleList?>
+    private lateinit var liveDataList: MutableLiveData<RecyclerList?>
 
     init {
+        (application as MyApplication).getRetroComponent().inject(this)
         liveDataList = MutableLiveData()
     }
 
-    fun getLiveDataObserver(): MutableLiveData<RecycleList?> {
+    fun getLiveDataObserver(): MutableLiveData<RecyclerList?> {
         return liveDataList
     }
 
     fun makeApiCall() {
-        val call: Call<RecycleList>? = mService.getDataFromAPI("atl")
-        call?.enqueue(object : Callback<RecycleList> {
-            override fun onResponse(call: Call<RecycleList>, response: Response<RecycleList>) {
+        val call: Call<RecyclerList>? = mService.getDataFromAPI("zaher")
+        call?.enqueue(object : Callback<RecyclerList> {
+            override fun onResponse(call: Call<RecyclerList>, response: Response<RecyclerList>) {
                 if (response.isSuccessful) {
+                    Log.d("TESTCode", "onResponse: ${response.body()}")
                     liveDataList.postValue(response.body())
                 } else {
                     liveDataList.postValue(null)
@@ -37,7 +40,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
             }
 
-            override fun onFailure(call: Call<RecycleList>, t: Throwable) {
+            override fun onFailure(call: Call<RecyclerList>, t: Throwable) {
                 TODO("Not yet implemented")
             }
         })

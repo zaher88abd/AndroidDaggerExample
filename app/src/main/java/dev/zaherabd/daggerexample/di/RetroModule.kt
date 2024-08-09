@@ -22,9 +22,9 @@ class RetroModule {
     @Singleton
     @Provides
     fun getRetroFitInstance(): Retrofit {
-        val gson = GsonBuilder().create()
-        return Retrofit.Builder().baseUrl(baseURL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build()
+        return Retrofit.Builder()
+            .baseUrl(baseURL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 }

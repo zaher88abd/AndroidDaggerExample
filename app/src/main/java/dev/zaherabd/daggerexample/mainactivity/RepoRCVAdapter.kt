@@ -1,48 +1,40 @@
 package dev.zaherabd.daggerexample.mainactivity
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import dev.zaherabd.daggerexample.R
-import dev.zaherabd.daggerexample.model.RecycleData
-import dev.zaherabd.daggerexample.model.RecycleList
-import kotlinx.android.synthetic.main.recycler_view_list_item.view.avatarImageView
-import kotlinx.android.synthetic.main.recycler_view_list_item.view.tvDescription
-import kotlinx.android.synthetic.main.recycler_view_list_item.view.tvName
-import okhttp3.Request
+import dev.zaherabd.daggerexample.databinding.RecyclerViewListItemBinding
+import dev.zaherabd.daggerexample.model.RecyclerData
 
 class RepoRCVAdapter : RecyclerView.Adapter<RepoRCVAdapter.RepoVieHolder>() {
 
-    private var listData: List<RecycleData>? = null
+    private var listData: List<RecyclerData>? = null
 
-    fun setUpdateData(listData: List<RecycleData>) {
+    fun setUpdateData(listData: List<RecyclerData>) {
         this.listData = listData
     }
 
-    class RepoVieHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView = view.avatarImageView
-        val tvName = view.tvName
-        val tvDesc = view.tvDescription
-        fun bind(data: RecycleData) {
-            tvName.text = data.name
-            tvDesc.text = data.description
-            Glide.with(imageView).load(data.owner?.avatar_url)
-                .apply(RequestOptions.centerCropTransform()).into(imageView)
+    class RepoVieHolder(val bindItem: RecyclerViewListItemBinding) :
+        RecyclerView.ViewHolder(bindItem.root) {
+        fun bind(data: RecyclerData) {
+            this.bindItem.tvName.text = data.name
+            this.bindItem.tvDescription.text = data.description
+            Glide.with(this.bindItem.avatarImageView).load(data.owner?.avatar_url)
+                .apply(RequestOptions.centerCropTransform()).into(this.bindItem.avatarImageView)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoVieHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_view_list_item, parent, false)
+        val view =
+            RecyclerViewListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return RepoVieHolder(view)
     }
 
     override fun getItemCount(): Int {
-        if (listData == null) return 0;
-        else return listData?.size!!
+        return if (listData == null) 0;
+        else listData?.size!!
     }
 
     override fun onBindViewHolder(holder: RepoVieHolder, position: Int) {
